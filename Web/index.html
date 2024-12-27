@@ -41,7 +41,7 @@
             padding: 0.5rem;
         }
 
-        form {
+        section {
             display: flex;
             row-gap: 1rem;
             flex-direction: column;
@@ -228,7 +228,7 @@
                 margin: 0 auto;
             }
 
-            form #ticks {
+            section #ticks {
                 width: 100%;
                 border-radius: 0;
             }
@@ -244,7 +244,7 @@
                 color: #000;
             }
 
-            form #ticks {
+            section #ticks {
                 background-color: #fff;
                 color: #000;
                 box-shadow: none;
@@ -316,7 +316,7 @@
 <body>
     <main>
         <h1>Convert C#/.NET <code>ticks</code> to DateTime</h1>
-        <form>
+        <section>
             <div>
                 <label for="ticks">Ticks:</label>
                 <input type="text" placeholder="ticks" id="ticks" size="17" autofocus />
@@ -326,7 +326,7 @@
                 <div id="datetime"><b>0001</b>-<b>01</b>-<b>01</b><span>​T</span><b>00</b>:<b>00</b>:<b>00</b>.<b>000Z</b></div>
             </div>
             <div id="congratulations">Congratulations!</div>
-        </form>
+        </section>
         <aside>
             <h2>What are <code>ticks</code>?</h2>
             <p>From <a href="https://learn.microsoft.com/en-us/dotnet/api/system.datetime.ticks?view=net-9.0#remarks">the docs</a>:</p>
