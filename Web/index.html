@@ -62,9 +62,9 @@
             }
 
             #ticks {
-                border: none;
                 outline: none;
-                border-radius: 0.5rem;
+                border: solid 1px #000;
+                border-radius: 0.25rem;
             }
 
             #datetime span {
@@ -185,18 +185,16 @@
 
         /* colors */
         body {
-            background-color: #e8fb8a;
+            /* background-color: #e8fb8a; */
         }
 
         #ticks {
-            background-color: #5B7411;
-            font-weight: lighter;
-            color: #F3F4F1;
-            box-shadow: 0 15px 20px -15px #5B7411;
+            background-color: #ddd;
+            color: #0c304a;
         }
 
         #ticks::placeholder {
-            color: #f3f4f179;
+            color: #888;
         }
 
         dd:has(b),
@@ -231,39 +229,7 @@
             section #ticks {
                 width: 100%;
                 border-radius: 0;
-            }
-        }
-
-        @media (prefers-contrast: more) {
-
-            h1,
-            h2,
-            dd,
-            body {
-                background-color: #fff;
-                color: #000;
-            }
-
-            section #ticks {
-                background-color: #fff;
-                color: #000;
-                box-shadow: none;
-                border: 2px solid #000;
-                /* outline: inherit; */
-            }
-
-            #ticks::placeholder,
-            #datetime,
-            dd:has(b),
-            dd b,
-            #datetime b,
-            #fin {
-                color: #444 !important;
-            }
-
-            a:any-link {
-                text-decoration: none;
-                color: #1b6396;
+                border-width: 1px 0;
             }
         }
 
@@ -308,6 +274,13 @@
 
             #fin {
                 color: #aad627;
+            }
+        }
+
+        @media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+            section #ticks {
+                background-color: #aad627;
+                color: #000;
             }
         }
     </style>
