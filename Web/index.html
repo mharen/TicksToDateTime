@@ -1,271 +1,444 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <title>Ticks &rarr; DateTime</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="description" content="Convert C#/.NET ticks to a human-readable date and time." />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <style>
-        body, section, footer {
+        /* layout */
+        html {
+            box-sizing: border-box;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+            /* border: 1px solid red; */
+        }
+
+        body {
             margin: 0;
-            background-color: #BFD841;
+            padding: 0;
+        }
+
+        main {
+            max-width: min(100% - 1rem, 900px);
+            margin: 0 auto;
         }
 
         footer {
-            box-shadow: 0 0 10px 10px #bfd841;
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
+            max-width: 900px;
+            margin: 2rem auto 0 auto;
+            padding: .5rem;
         }
 
-        section {
-            padding: 10px;
-            margin-top: 10px;
-            text-align: center;
-            font-size: 200%;
+        h1 {
+            margin: 0;
+            padding: .5rem;
         }
 
-            section input, #datetime {
-                font-family: Consolas, Courier New, monospace;
+        form {
+            display: flex;
+            row-gap: 1rem;
+            flex-direction: column;
+
+            label,
+            input,
+            #arrow,
+            #congratulations,
+            #datetime {
+                padding: 0 .5rem;
             }
 
-            section input {
-                font-size: 100%;
-                padding: 5px 10px;
-                background-color: #85A71E;
+            #arrow,
+            label {
+                display: block;
+                margin-bottom: .25rem;
+                word-break: break-word;
+            }
+
+            #ticks {
                 border: none;
-                border-radius: 10px;
-                color: #F3F4F1;
                 outline: none;
-                box-shadow: 0 15px 20px -15px #85A71E;
-                box-sizing: border-box;
+                border-radius: .5rem;
             }
 
-                section input::-webkit-input-placeholder {
-                    color: #F3F4F1;
-                }
-
-                section input::-moz-placeholder {
-                    color: #F3F4F1;
-                }
-
-                section input:-ms-input-placeholder {
-                    color: #F3F4F1;
-                }
-
-        #arrow {
-            padding: 15px 0;
-        }
-
-        #datetime, #arrow {
-            color: #85a71e;
-        }
-
-            #datetime b {
-                font-weight: normal;
-                color: #0c304a;
+            #datetime span {
+                padding-left: .5rem;
+                padding-right: .5rem;
             }
 
-            #datetime .pad {
-                padding-left: 10px;
-                padding-right: 10px;
+            #congratulations {
+                opacity: 0;
+                font-style: italic;
             }
-
-        #congratulations {
-            opacity: 0;
-            font-style: italic;
-            padding-top: 25px;
-            font-size: 75%;
-        }
 
             #congratulations.show {
                 opacity: 1;
                 transition: opacity .5s ease;
             }
-
-        a:link, a:visited, a:active {
-            text-decoration: none;
-            color: #0C304A;
         }
 
-        a:hover {
+        footer,
+        aside {
+            margin-top: 2rem;
+            padding: 0 .5rem;
+        }
+
+        blockquote {
+            margin: 0;
+            font-style: italic;
+        }
+
+        dl,
+        dd,
+        dt {
+            margin: 0;
+        }
+
+        dd+dt {
+            margin-top: 1rem;
+        }
+
+        dd {
+            margin-top: .25rem;
+        }
+
+        dl span::before {
+            content: ",";
+        }
+
+        #fin {
+            margin: 2rem 0 0 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        footer {
+            margin-bottom: 2rem;
+
+            ul {
+                margin: 0;
+                padding: 0;
+                list-style-type: none;
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+
+        /* fonts */
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Ubuntu", "Roboto", "Noto Sans", "Droid Sans", sans-serif;
+            color: #000;
+        }
+
+        p {
+            line-height: 1.4;
+        }
+
+        #ticks,
+        #datetime,
+        code {
+            font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", "Liberation Mono", Menlo, Monaco, Consolas, monospace;
+        }
+
+        blockquote {
+            font-style: italic;
+        }
+
+
+        /* font sizes */
+        body {
+            font-size: 16px;
+        }
+
+        h1,
+        #ticks,
+        #datetime {
+            font-size: clamp(1rem, 5vw, 2rem);
+        }
+
+        h2 {
+            font-size: clamp(1rem, 4vw, 1.5rem);
+        }
+
+        dt {
+            font-size: clamp(.8rem, 3vw, 1rem);
+        }
+
+        dt::after {
+            content: ":";
+        }
+
+        dd {
+            font-size: clamp(1rem, 4vw, 1.25rem);
+        }
+
+
+        /* colors */
+        body {
+            background-color: #BFD841;
+        }
+
+        #ticks {
+            background-color: #85A71E;
+            color: #F3F4F1;
+            box-shadow: 0 15px 20px -15px #85A71E;
+        }
+
+        #ticks::placeholder {
+            color: #f3f4f179;
+        }
+
+        dd:has(b),
+        #datetime {
+            color: #85a71e;
+        }
+
+        dd b,
+        #datetime b {
+            font-weight: normal;
+            color: #0c304a;
+        }
+
+        a:any-link {
+            text-decoration: none;
             color: #2B79A1;
         }
 
-        @media screen and (max-width: 640px) {
-            section, footer {
-                padding: 10px 0;
-            }
-
-            footer {
-                text-align: center;
-                position: relative;
-            }
-
-            section {
-                font-size: 125%;
-            }
-
-                section input {
-                    width: 100%;
-                    border-radius: 0;
-                    padding: 20px 10px;
-                    font-size: 150%;
-                    text-align: center;
-                }
+        #fin {
+            color: #85A71E;
         }
 
-        @media screen and (max-width: 320px) {
-            section {
-                margin-top: 0;
-                padding: 0;
+
+        @media screen and (max-width: 600px) {
+            main {
+                max-width: 100%;
+                margin: 0 auto;
             }
 
-                section input {
-                    margin: 0;
-                }
-
-            #arrow {
-                padding: 10px 0;
+            form #ticks {
+                width: 100%;
+                border-radius: 0;
             }
         }
     </style>
 </head>
+
 <body>
-    <section>
-        <div>
-            <input type="text" placeholder="ticks" id="ticks" size="17" autofocus="autofocus" />
-        </div>
-        <div id="arrow">&darr;</div>
-        <div id="datetime"></div>
-        <div id="congratulations">Congratulations!</div>
-    </section>
+    <main>
+        <h1>Convert C#/.NET <code>ticks</code> to DateTime</h1>
+        <form>
+            <div>
+                <label for="ticks">Ticks:</label>
+                <input type="text" placeholder="ticks" id="ticks" size="17" autofocus />
+            </div>
+            <div>
+                <div id="arrow"><code id="ticks-copy">0</code> ticks represents:</div>
+                <div id="datetime"><b>0001</b>-<b>01</b>-<b>01</b><span>​T</span><b>00</b>:<b>00</b>:<b>00</b>.<b>000Z</b></div>
+            </div>
+            <div id="congratulations">Congratulations!</div>
+        </form>
+        <aside>
+            <h2>What are <code>ticks</code>?</h2>
+            <p>From <a href="https://learn.microsoft.com/en-us/dotnet/api/system.datetime.ticks?view=net-9.0#remarks">the docs</a>:</p>
+            <blockquote cite="https://learn.microsoft.com/en-us/dotnet/api/system.datetime.ticks?view=net-9.0#remarks">
+                <p>
+                    A single tick represents one hundred nanoseconds or one ten-millionth of a second. There are 10,000
+                    ticks in a millisecond and 10 million ticks in a second.
+                </p>
+                <p>
+                    The value of this property represents the number of 100-nanosecond intervals that have elapsed since
+                    12:00:00 midnight, January 1, 0001 in the Gregorian calendar, which represents <code>MinValue</code>. It does not
+                    include the number of ticks that are attributable to leap seconds.
+                </p>
+                <p>
+                    In general, the ticks represent the time according to the time zone specified by the Kind property.
+                </p>
+            </blockquote>
+
+            <h2>Notable ticks</h2>
+            <dl>
+                <dt><code>0</code> ticks (<code>DateTime.MinValue</code>)</dt>
+                <dd><code><b>0001</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>00</b>:<b>00.000Z</b></code></dd>
+
+                <dt><code>3<span>155</span><span>378</span><span>975</span><span>999</span><span>999</span><span>999</span></code> ticks (<code>DateTime.MaxValue</code>)</dt>
+                <dd><code><b>9999</b>-<b>12</b>-<b>31</b>T<b>23</b>:<b>59</b>:<b>59.000Z</b></code></dd>
+
+                <dt><code>2<span>147</span><span>483</span><span>647</span></code> ticks (<code>Int32.MaxValue</code>)</dt>
+                <dd><code><b>0001</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>03</b>:<b>34.7483647Z</b></code></dd>
+
+                <dt><code>621<span>355</span><span>968</span><span>000</span><span>000</span><span>000</span></code> ticks (Unix epoch)</dt>
+                <dd><code><b>1970</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>00</b>:<b>00Z</b></code></dd>
+
+                <dt><code>630<span>822</span><span>816</span><span>000</span><span>000</span><span>000</span></code> ticks</dt>
+                <dd><code><b>2000</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>00</b>:<b>00Z</b></code></dd>
+
+                <dt><code>633<span>979</span><span>008</span><span>000</span><span>000</span><span>000</span></code> ticks</dt>
+                <dd><code><b>2010</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>00</b>:<b>00Z</b></code></dd>
+
+                <dt><code>637<span>134</span><span>336</span><span>000</span><span>000</span><span>000</span></code> ticks</dt>
+                <dd><code><b>2020</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>00</b>:<b>00Z</b></code></dd>
+
+                <dt><code>638<span>712</span><span>864</span><span>000</span><span>000</span><span>000</span></code> ticks</dt>
+                <dd><code><b>2025</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>00</b>:<b>00Z</b></code></dd>
+
+                <dt><code>640<span>290</span><span>528</span><span>000</span><span>000</span><span>000</span></code> ticks</dt>
+                <dd><code><b>2030</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>00</b>:<b>00Z</b></code></dd>
+            </dl>
+
+            <h2>Bundles of ticks</h2>
+            <dl>
+                <dt>1 microsecond (10<sup>-6</sup>)</dt>
+                <dd><code>10</code> ticks</dd>
+
+                <dt>1 millisecond (10<sup>-3</sup>)</dt>
+                <dd><code>10<span>000</span></code> ticks</dd>
+
+                <dt>1 second</dt>
+                <dd><code>10<span>000</span><span>000</span></code> ticks</dd>
+
+                <dt>1 minute</dt>
+                <dd><code>600<span>000</span><span>000</span></code> ticks</dd>
+
+                <dt>1 hour</dt>
+                <dd><code>36<span>000</span><span>000</span><span>000</span></code> ticks</dd>
+
+                <dt>1 day</dt>
+                <dd><code>864<span>000</span><span>000</span><span>000</span></code> ticks</dd>
+
+                <dt>365 days</dt>
+                <dd><code>315<span>360</span><span>000</span><span>000</span><span>000</span></code> ticks</dd>
+            </dl>
+        </aside>
+    </main>
+    <pre id="fin" aria-hidden="true">-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-</pre>
     <footer>
-        <a href="http://twitter.com/mharen">@mharen</a> |
-        <a href="http://upboat.me">upboat.me</a> |
-        <a href="https://github.com/worldwidewat/TicksToDateTime">source</a>
+        <ul>
+            <li><a rel="me" href="https://hachyderm.io/@mharen">mastadon</a></li>
+            <li><a href="https://www.wassupy.com">home</a></li>
+            <li><a href="https://github.com/worldwidewat/TicksToDateTime">source</a></li>
+            <li><a href="https://datetimetostring.wassupy.com">DateTime.ToString()</a></li>
+            <li><a href="https://inttobitmask.wassupy.com/">Int → Bitmask</a></li>
+            <li><a href="https://newguid.wassupy.com/">New GUID</a></li>
+            <li><a href="https://vcfprinter.wassupy.com/">VCF/VCard Printer</a></li>
+            <li><a href="https://whatazurewebsiteenvironmentvariablesareavailable.azurewebsites.net/">Azure WebApp Vars</a></li>
+            <li><a href="https://upboatme.azurewebsites.net/">Meme Generator</a></li>
+            <li><a href="https://hampsterdance.wassupy.com">Hamster Dance</a></li>
+        </ul>
     </footer>
     <script>
-        var epochTicks = 621355968000000000n;
-        var ticksPerMillisecond = 10000n; // whoa!
-        var maxDateMilliseconds = 8640000000000000n; // via http://ecma-international.org/ecma-262/5.1/#sec-15.9.1.1
-        var congratulationsTimer;
+        // 'n' suffix is for BigInt literals https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt
+        const epochTicks = 621355968000000000n;
+        const ticksPerMillisecond = 10000n; // whoa!
+        const maxDateMilliseconds = 8640000000000000n; // via http://ecma-international.org/ecma-262/5.1/#sec-15.9.1.1
+        const maxDateTimeTicks = 3155378975999999999n;
+        const overflowOutput = "WHOA-NO-ISTOO:FA:RA.WAYZ";
+        const errorOutput = "NANA-NA-NATNA:NA:BA.TMAN";
+        let congratulationsTimer;
 
-        var ticksToDateString = function (input) {
-            var ticks;
+        const ticksToDateString = function (input) {
+            let ticks;
             try {
                 ticks = BigInt(input);
             } catch (error) {
                 //      0001-01-01T00:00:00.000Z
-                return "NANA-NA-NATNA:NA:BA.TMAN";
+                return errorOutput;
             }
             if (ticks < 0)
-                return "NANA-NA-NATNA:NA:BA.TMAN";
+                return errorOutput;
+
+            if (ticks > maxDateTimeTicks)
+                return overflowOutput;
 
             // convert the ticks into something javascript understands
-            var ticksSinceEpoch = ticks - epochTicks;
-            var millisecondsSinceEpoch = ticksSinceEpoch / ticksPerMillisecond;
-
-            if (millisecondsSinceEpoch > maxDateMilliseconds) {
-                //      +035210-09-17T07:18:31.111Z
-                return "+WHOAWH-OA-ISTOO:FA:RA.WAYZ";
-            }
+            const ticksSinceEpoch = ticks - epochTicks;
+            const millisecondsSinceEpoch = ticksSinceEpoch / ticksPerMillisecond;
 
             // output the result in something the human understands
-            var date = new Date(Number(millisecondsSinceEpoch));
+            const date = new Date(Number(millisecondsSinceEpoch));
             return date.toISOString();
         };
 
+        const ticksOutput = document.getElementById("ticks-copy");
+        const dateTimeOutput = document.getElementById("datetime");
+        const congratulations = document.getElementById("congratulations");
+
         // the event handler that runs on page load and when the input changes
-        var doWork = function () {
-            var dateTimeOutput = document.getElementById("datetime");
-            var congratulations = document.getElementById("congratulations");
+        const doWork = function () {
+            const val = this.value || "0";
+            ticksOutput.textContent = val;
+            const dateString = ticksToDateString(val);
 
-            var dateString = ticksToDateString(this.value || "0");
+            // split the output at the "T" so we can treat that character specially
+            const firstTIndex = dateString.indexOf("T");
+            const datePart = dateString.slice(0, firstTIndex);
+            const timePart = dateString.slice(firstTIndex + 1);
 
-            // split the output at the "T" so we can treat that
-            // character specially
-            var firstTIndex = dateString.indexOf("T");
-            var datePart = dateString.slice(0, firstTIndex);
-            var timePart = dateString.slice(firstTIndex + 1);
-
-            var goodParts = /([A-Z0-9]+)/g;
-            var wrapParts = "<b>$1</b>";
+            const goodParts = /([A-Z0-9]+)/g;
+            const wrapParts = "<b>$1</b>";
 
             // wrap everything but the separators in <b> tags and pad the "T" separator with spaces 
             // and prepend it with a zero-width space so the line will break there on small screens
-            var output = datePart.replace(goodParts, wrapParts)
-                + "<span class='pad'>&#8203;T</span>"
+            const output = datePart.replace(goodParts, wrapParts)
+                + "<span>&#8203;T</span>"
                 + timePart.replace(goodParts, wrapParts);
 
             dateTimeOutput.innerHTML = output;
 
-            var ticksLength = this.value.length;
+            const ticksLength = this.value.length;
             if (ticksLength != this.size) {
                 this.size = Math.max(17, Math.min(ticksLength, 30));
             }
 
-            // hat tip: newguid.com
-            if (congratulationsTimer) {
+            if (congratulationsTimer)
                 clearTimeout(congratulationsTimer);
-            }
-            if (this.value.length > 0) {
-                congratulationsTimer = setTimeout(function () { congratulations.className = "show"; }, 1000);
-            }
+
+            if (this.value.length > 0)
+                congratulationsTimer = setTimeout(() => congratulations.className = "show", 1000);
         };
 
-        // bind to the first supported event (listed in order of preference)
-        var possibleEvents = ["oninput", "onpropertychange", "onkeyup", "onchange"];
-
         window.onload = function () {
-            var ticksInput = document.getElementById("ticks");
+            const ticksInput = document.getElementById("ticks");
             doWork.call(ticksInput);
 
-            // for/each is deprecated, but alternatives like array.foreach isn't _widely_ supported yet :/
-            for (var i = 0; i < possibleEvents.length; ++i) {
-                var eventName = possibleEvents[i];
+            // bind to the first supported event (listed in order of preference)
+            for (const eventName of ["oninput", "onpropertychange", "onkeyup", "onchange"]) {
                 if (eventName in ticksInput) {
                     ticksInput[eventName] = doWork;
                     break;
                 }
             }
-
-            // hack for IE, which doesn't fire the preferred events on backspace/delete
-            if (navigator.appName == 'Microsoft Internet Explorer') {
-                ticksInput.onkeyup = function (e) {
-                    if (e.keyCode == 8 || e.keyCode == 46) {
-                        doWork.call(this);
-                    }
-                };
-            }
         };
 
         // run doTests() in the browser console to verify
-        window.doTests = function() {
+        window.doTests = function () {
             // https://replit.com/@mharen/RecentFocusedPolygons#main.cs
-            for(var testCase of [
-                {input: '', expected: '0001-01-01T00:00:00.000Z'},
-                {input: '1', expected: '0001-01-01T00:00:00.001Z'},
-                {input: '99999999999999999999', expected: '+WHOAWH-OA-ISTOO:FA:RA.WAYZ'},
-                {input: '638338147199990000', expected: '2023-10-25T07:11:59.999Z'},
-                {input: '638338147200000000', expected: '2023-10-25T07:12:00.000Z'},
-                {input: '638315425210000000', expected: '2023-09-29T00:02:01.000Z'},
-                {input: '638315425210010000', expected: '2023-09-29T00:02:01.001Z'},
-            ]){
+            for (const testCase of [
+                { input: '', expected: '0001-01-01T00:00:00.000Z' },
+                { input: '1', expected: '0001-01-01T00:00:00.001Z' },
+                { input: '-1', expected: errorOutput },
+                { input: 'foo', expected: errorOutput },
+                { input: undefined, expected: errorOutput },
+                { input: '99999999999999999999', expected: overflowOutput },
+                { input: '638338147199990000', expected: '2023-10-25T07:11:59.999Z' },
+                { input: '638338147200000000', expected: '2023-10-25T07:12:00.000Z' },
+                { input: '638315425210000000', expected: '2023-09-29T00:02:01.000Z' },
+                { input: '638315425210010000', expected: '2023-09-29T00:02:01.001Z' },
+            ]) {
                 testCase.actual = ticksToDateString(testCase.input);
                 testCase.status = testCase.expected === testCase.actual ? "✅" : "❌";
                 console.log(testCase);
             }
         };
-
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date(); a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-        ga('create', 'UA-41725429-2', 'tickstodatetime.com');
-        ga('send', 'pageview');
     </script>
 </body>
+
 </html>
