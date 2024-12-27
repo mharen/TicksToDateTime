@@ -309,7 +309,7 @@
             </blockquote>
 
             <h2>Notable ticks</h2>
-            <dl>
+            <dl id="notable">
                 <dt><a href="?ticks=0"><code>0</code> ticks</a> (<code>DateTime.MinValue</code>)</dt>
                 <dd><code><b>0001</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>00</b>:<b>00.000Z</b></code></dd>
 
@@ -333,9 +333,6 @@
 
                 <dt><a href="?ticks=638712864000000000"><code>638<span>712</span><span>864</span><span>000</span><span>000</span><span>000</span></code> ticks</a></dt>
                 <dd><code><b>2025</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>00</b>:<b>00Z</b></code></dd>
-
-                <dt><a href="?ticks=640290528000000000"><code>640<span>290</span><span>528</span><span>000</span><span>000</span><span>000</span></code> ticks</a></dt>
-                <dd><code><b>2030</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>00</b>:<b>00Z</b></code></dd>
             </dl>
 
             <h2>Bundles of ticks</h2>
@@ -378,10 +375,9 @@
     </footer>
     <script>
         // "n" suffix is for BigInt literals https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt
-        const epochTicks = 621355968000000000n;
-        const ticksPerMillisecond = 10000n; // whoa!
-        const maxDateMilliseconds = 8640000000000000n; // via http://ecma-international.org/ecma-262/5.1/#sec-15.9.1.1
-        const maxDateTimeTicks = 3155378975999999999n;
+        const epochTicks = 621_355_968_000_000_000n;
+        const ticksPerMillisecond = 10_000n; // whoa!
+        const maxDateTimeTicks = 3_155_378_975_999_999_999n;
         const overflowOutput = "WHOA-NO-ISTOO:FA:RA.WAYZ";
         const errorOutput = "NANA-NA-NATNA:NA:BA.TMAN";
         let congratulationsTimer;
@@ -415,6 +411,24 @@
         const dateTimeOutput = document.getElementById("datetime");
         const congratulations = document.getElementById("congratulations");
 
+        const formatDateString = function (dateString, addSpanOnT = true) {
+            // split the output at the "T" so we can treat that character specially
+            const firstTIndex = dateString.indexOf("T");
+            const datePart = dateString.slice(0, firstTIndex);
+            const timePart = dateString.slice(firstTIndex + 1);
+
+            const goodParts = /([A-Z0-9]+)/g;
+            const wrapParts = "<b>$1</b>";
+
+            // wrap everything but the separators in <b> tags and pad the "T" separator with spaces 
+            // and prepend it with a zero-width space so the line will break there on small screens
+            const output = datePart.replace(goodParts, wrapParts)
+                + (addSpanOnT ? "<span>&#8203;T</span>" : "T")
+                + timePart.replace(goodParts, wrapParts);
+
+            return output;
+        };
+
         // the event handler that runs on page load and when the input changes
         const doWork = function () {
             const val = this.value || "0";
@@ -433,21 +447,7 @@
 
             // update output
             const dateString = ticksToDateString(val);
-
-            // split the output at the "T" so we can treat that character specially
-            const firstTIndex = dateString.indexOf("T");
-            const datePart = dateString.slice(0, firstTIndex);
-            const timePart = dateString.slice(firstTIndex + 1);
-
-            const goodParts = /([A-Z0-9]+)/g;
-            const wrapParts = "<b>$1</b>";
-
-            // wrap everything but the separators in <b> tags and pad the "T" separator with spaces 
-            // and prepend it with a zero-width space so the line will break there on small screens
-            const output = datePart.replace(goodParts, wrapParts)
-                + "<span>&#8203;T</span>"
-                + timePart.replace(goodParts, wrapParts);
-
+            const output = formatDateString(dateString)
             dateTimeOutput.innerHTML = output;
 
             const ticksLength = this.value.length;
@@ -488,7 +488,7 @@
         // onload
         //
 
-        window.byQuery = function () {
+        const byQuery = function () {
             // attempt to set the page if something is passed into the query string
             const urlParams = new URLSearchParams(window.location.search);
             const ticks = urlParams.get("ticks");
@@ -497,14 +497,14 @@
                 doWork.call(ticksInput);
             }
         };
-        window.byQuery();
+        byQuery();
 
         // intercept link clicks that we can handle without reloading the page
         document.querySelector("body").addEventListener("click", function (e) {
             const anchor = e.target.closest("a");
             if (anchor && anchor.getAttribute("href").startsWith("?ticks=")) {
                 history.replaceState({}, "", anchor.href);
-                window.byQuery();
+                byQuery();
                 document.body.scrollIntoView({ behavior: "smooth" });
                 e.preventDefault();
             }
@@ -517,6 +517,23 @@
                 break;
             }
         }
+
+        // add notable ticks to the list
+        const notable = document.getElementById("notable");
+        const nowDt = document.createElement("DT");
+        const nowDd = document.createElement("DD");
+        notable.append(nowDt, nowDd);
+
+        const updateNowNotableTick = function () {
+            // setting the precision here to seconds makes the changing output easier to follow
+            const nowTicks = BigInt(Math.floor(new Date().getTime() / 1000)) * 1000n * ticksPerMillisecond + epochTicks;
+            const nowDateTime = ticksToDateString(nowTicks);
+            const formattedTicks = nowTicks.toString().replace(/(?<=\d{3})(\d{3})/g, "<span>$1</span>");
+            nowDt.innerHTML = `<a href="?ticks=${nowTicks}"><code>${formattedTicks}</code> ticks</a> (now)</dt>`;
+            nowDd.innerHTML = `<code>${formatDateString(nowDateTime, false)}</code>`;
+        };
+        updateNowNotableTick();
+        setInterval(updateNowNotableTick, 1_000);
     </script>
 </body>
 
