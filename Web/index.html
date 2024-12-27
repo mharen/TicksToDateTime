@@ -377,6 +377,7 @@
         // "n" suffix is for BigInt literals https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt
         const epochTicks = 621_355_968_000_000_000n;
         const ticksPerMillisecond = 10_000n; // whoa!
+        const ticksPerHour = ticksPerMillisecond * 1_000n * 60n * 60n;
         const maxDateTimeTicks = 3_155_378_975_999_999_999n;
         const overflowOutput = "WHOA-NO-ISTOO:FA:RA.WAYZ";
         const errorOutput = "NANA-NA-NATNA:NA:BA.TMAN";
@@ -520,20 +521,26 @@
 
         // add notable ticks to the list
         const notable = document.getElementById("notable");
-        const nowDt = document.createElement("DT");
-        const nowDd = document.createElement("DD");
-        notable.append(nowDt, nowDd);
 
-        const updateNowNotableTick = function () {
-            // setting the precision here to seconds makes the changing output easier to follow
-            const nowTicks = BigInt(Math.floor(new Date().getTime() / 1000)) * 1000n * ticksPerMillisecond + epochTicks;
-            const nowDateTime = ticksToDateString(nowTicks);
-            const formattedTicks = nowTicks.toString().replace(/(?<=\d{3})(\d{3})/g, "<span>$1</span>");
-            nowDt.innerHTML = `<a href="?ticks=${nowTicks}"><code>${formattedTicks}</code> ticks</a> (now)</dt>`;
-            nowDd.innerHTML = `<code>${formatDateString(nowDateTime, false)}</code>`;
+        const addNotableTick = function (ticksFunc, description) {
+            const dt = document.createElement("DT");
+            const dd = document.createElement("DD");
+            notable.append(dt, dd);
+            const set = function () {
+                const ticks = ticksFunc();
+                const dateTime = ticksToDateString(ticks);
+                const formattedTicks = ticks.toString().replace(/(?<=\d{3})(\d{3})/g, "<span>$1</span>");
+                dt.innerHTML = `<a href="?ticks=${ticks}"><code>${formattedTicks}</code> ticks</a> (${description})</dt>`;
+                dd.innerHTML = `<code>${formatDateString(dateTime, false)}</code>`;
+            }
+            set();
+            setInterval(set, 1_000);
         };
-        updateNowNotableTick();
-        setInterval(updateNowNotableTick, 1_000);
+
+        const nowFunc = () => BigInt(Math.floor(new Date().getTime() / 1000)) * 1000n * ticksPerMillisecond + epochTicks;
+        addNotableTick(() => nowFunc() - 24n * ticksPerHour, "1 day ago");
+        addNotableTick(() => nowFunc() - ticksPerHour, "1 hour ago");
+        addNotableTick(nowFunc, "now");
     </script>
 </body>
 
