@@ -32,12 +32,12 @@
         footer {
             max-width: 900px;
             margin: 2rem auto 0 auto;
-            padding: .5rem;
+            padding: 0.5rem;
         }
 
         h1 {
             margin: 0;
-            padding: .5rem;
+            padding: 0.5rem;
         }
 
         form {
@@ -50,25 +50,25 @@
             #arrow,
             #congratulations,
             #datetime {
-                padding: 0 .5rem;
+                padding: 0 0.5rem;
             }
 
             #arrow,
             label {
                 display: block;
-                margin-bottom: .25rem;
+                margin-bottom: 0.25rem;
                 word-break: break-word;
             }
 
             #ticks {
                 border: none;
                 outline: none;
-                border-radius: .5rem;
+                border-radius: 0.5rem;
             }
 
             #datetime span {
-                padding-left: .5rem;
-                padding-right: .5rem;
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
             }
 
             #congratulations {
@@ -78,14 +78,14 @@
 
             #congratulations.show {
                 opacity: 1;
-                transition: opacity .5s ease;
+                transition: opacity 0.5s ease;
             }
         }
 
         footer,
         aside {
             margin-top: 2rem;
-            padding: 0 .5rem;
+            padding: 0 0.5rem;
         }
 
         blockquote {
@@ -104,7 +104,7 @@
         }
 
         dd {
-            margin-top: .25rem;
+            margin-top: 0.25rem;
         }
 
         dl span::before {
@@ -210,7 +210,7 @@
 
         a:any-link {
             text-decoration: none;
-            color: #2B79A1;
+            color: #266686;
         }
 
         #fin {
@@ -227,6 +227,50 @@
             form #ticks {
                 width: 100%;
                 border-radius: 0;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #000;
+                color: #8eb222;
+            }
+
+            #ticks {
+                background-color: #aad62766;
+                color: #dbdbdb;
+                box-shadow: none;
+            }
+
+            #ticks::placeholder {
+                color: #94949479;
+            }
+
+            #datetime,
+            dd:has(b) {
+                color: #dbdbdbaa;
+            }
+
+            h1,
+            h2,
+            dd,
+            dd b,
+            #datetime b {
+                color: #dbdbdb;
+            }
+
+            dd b,
+            #datetime b {
+                font-weight: normal;
+            }
+
+            a:any-link {
+                text-decoration: none;
+                color: #27b0d6;
+            }
+
+            #fin {
+                color: #aad627;
             }
         }
     </style>
@@ -266,31 +310,31 @@
 
             <h2>Notable ticks</h2>
             <dl>
-                <dt><code>0</code> ticks (<code>DateTime.MinValue</code>)</dt>
+                <dt><a href="?ticks=0"><code>0</code> ticks</a> (<code>DateTime.MinValue</code>)</dt>
                 <dd><code><b>0001</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>00</b>:<b>00.000Z</b></code></dd>
 
-                <dt><code>3<span>155</span><span>378</span><span>975</span><span>999</span><span>999</span><span>999</span></code> ticks (<code>DateTime.MaxValue</code>)</dt>
+                <dt><a href="?ticks=3155378975999999999"><code>3<span>155</span><span>378</span><span>975</span><span>999</span><span>999</span><span>999</span></code> ticks</a> (<code>DateTime.MaxValue</code>)</dt>
                 <dd><code><b>9999</b>-<b>12</b>-<b>31</b>T<b>23</b>:<b>59</b>:<b>59.000Z</b></code></dd>
 
-                <dt><code>2<span>147</span><span>483</span><span>647</span></code> ticks (<code>Int32.MaxValue</code>)</dt>
+                <dt><a href="?ticks=2147483647"><code>2<span>147</span><span>483</span><span>647</span></code> ticks</a> (<code>Int32.MaxValue</code>)</dt>
                 <dd><code><b>0001</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>03</b>:<b>34.7483647Z</b></code></dd>
 
-                <dt><code>621<span>355</span><span>968</span><span>000</span><span>000</span><span>000</span></code> ticks (Unix epoch)</dt>
+                <dt><a href="?ticks=621355968000000000"><code>621<span>355</span><span>968</span><span>000</span><span>000</span><span>000</span></code> ticks</a> (Unix epoch)</dt>
                 <dd><code><b>1970</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>00</b>:<b>00Z</b></code></dd>
 
-                <dt><code>630<span>822</span><span>816</span><span>000</span><span>000</span><span>000</span></code> ticks</dt>
+                <dt><a href="?ticks=630822816000000000"><code>630<span>822</span><span>816</span><span>000</span><span>000</span><span>000</span></code> ticks</a></dt>
                 <dd><code><b>2000</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>00</b>:<b>00Z</b></code></dd>
 
-                <dt><code>633<span>979</span><span>008</span><span>000</span><span>000</span><span>000</span></code> ticks</dt>
+                <dt><a href="?ticks=633979008000000000"><code>633<span>979</span><span>008</span><span>000</span><span>000</span><span>000</span></code> ticks</a></dt>
                 <dd><code><b>2010</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>00</b>:<b>00Z</b></code></dd>
 
-                <dt><code>637<span>134</span><span>336</span><span>000</span><span>000</span><span>000</span></code> ticks</dt>
+                <dt><a href="?ticks=637134336000000000"><code>637<span>134</span><span>336</span><span>000</span><span>000</span><span>000</span></code> ticks</a></dt>
                 <dd><code><b>2020</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>00</b>:<b>00Z</b></code></dd>
 
-                <dt><code>638<span>712</span><span>864</span><span>000</span><span>000</span><span>000</span></code> ticks</dt>
+                <dt><a href="?ticks=638712864000000000"><code>638<span>712</span><span>864</span><span>000</span><span>000</span><span>000</span></code> ticks</a></dt>
                 <dd><code><b>2025</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>00</b>:<b>00Z</b></code></dd>
 
-                <dt><code>640<span>290</span><span>528</span><span>000</span><span>000</span><span>000</span></code> ticks</dt>
+                <dt><a href="?ticks=640290528000000000"><code>640<span>290</span><span>528</span><span>000</span><span>000</span><span>000</span></code> ticks</a></dt>
                 <dd><code><b>2030</b>-<b>01</b>-<b>01</b>T<b>00</b>:<b>00</b>:<b>00Z</b></code></dd>
             </dl>
 
@@ -322,20 +366,18 @@
     <pre id="fin" aria-hidden="true">-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-.,__,.-'~'-</pre>
     <footer>
         <ul>
-            <li><a rel="me" href="https://hachyderm.io/@mharen">mastadon</a></li>
             <li><a href="https://www.wassupy.com">home</a></li>
-            <li><a href="https://github.com/worldwidewat/TicksToDateTime">source</a></li>
+            <li><a href="https://github.com/mharen/TicksToDateTime">source</a></li>
+            <li><a rel="me" href="https://hachyderm.io/@mharen">mastadon</a></li>
             <li><a href="https://datetimetostring.wassupy.com">DateTime.ToString()</a></li>
-            <li><a href="https://inttobitmask.wassupy.com/">Int → Bitmask</a></li>
-            <li><a href="https://newguid.wassupy.com/">New GUID</a></li>
-            <li><a href="https://vcfprinter.wassupy.com/">VCF/VCard Printer</a></li>
-            <li><a href="https://whatazurewebsiteenvironmentvariablesareavailable.azurewebsites.net/">Azure WebApp Vars</a></li>
-            <li><a href="https://upboatme.azurewebsites.net/">Meme Generator</a></li>
-            <li><a href="https://hampsterdance.wassupy.com">Hamster Dance</a></li>
+            <li><a href="https://inttobitmask.wassupy.com">Int → Bitmask</a></li>
+            <li><a href="https://newguid.wassupy.com">New GUID</a></li>
+            <li><a href="https://vcfprinter.wassupy.com">VCF/VCard Printer</a></li>
+            <li><a href="https://whatazurewebsiteenvironmentvariablesareavailable.azurewebsites.net">Azure WebApp Vars</a></li>
         </ul>
     </footer>
     <script>
-        // 'n' suffix is for BigInt literals https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt
+        // "n" suffix is for BigInt literals https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt
         const epochTicks = 621355968000000000n;
         const ticksPerMillisecond = 10000n; // whoa!
         const maxDateMilliseconds = 8640000000000000n; // via http://ecma-international.org/ecma-262/5.1/#sec-15.9.1.1
@@ -346,6 +388,7 @@
 
         const ticksToDateString = function (input) {
             let ticks;
+
             try {
                 ticks = BigInt(input);
             } catch (error) {
@@ -367,6 +410,7 @@
             return date.toISOString();
         };
 
+        const ticksInput = document.getElementById("ticks");
         const ticksOutput = document.getElementById("ticks-copy");
         const dateTimeOutput = document.getElementById("datetime");
         const congratulations = document.getElementById("congratulations");
@@ -374,7 +418,20 @@
         // the event handler that runs on page load and when the input changes
         const doWork = function () {
             const val = this.value || "0";
-            ticksOutput.textContent = val;
+
+            // update label
+            if (/^[-]?\d+$/.test(val)) {
+                // if we just have numbers, then use a link
+                var a = document.createElement("A");
+                a.setAttribute("href", `?ticks=${val}`);
+                a.textContent = val;
+                ticksOutput.replaceChildren(a);
+                history.replaceState({}, "", a.href);
+            } else {
+                ticksOutput.textContent = val;
+            }
+
+            // update output
             const dateString = ticksToDateString(val);
 
             // split the output at the "T" so we can treat that character specially
@@ -405,39 +462,61 @@
                 congratulationsTimer = setTimeout(() => congratulations.className = "show", 1000);
         };
 
-        window.onload = function () {
-            const ticksInput = document.getElementById("ticks");
-            doWork.call(ticksInput);
-
-            // bind to the first supported event (listed in order of preference)
-            for (const eventName of ["oninput", "onpropertychange", "onkeyup", "onchange"]) {
-                if (eventName in ticksInput) {
-                    ticksInput[eventName] = doWork;
-                    break;
-                }
-            }
-        };
-
         // run doTests() in the browser console to verify
         window.doTests = function () {
             // https://replit.com/@mharen/RecentFocusedPolygons#main.cs
             for (const testCase of [
-                { input: '', expected: '0001-01-01T00:00:00.000Z' },
-                { input: '1', expected: '0001-01-01T00:00:00.001Z' },
-                { input: '-1', expected: errorOutput },
-                { input: 'foo', expected: errorOutput },
+                { input: "", expected: "0001-01-01T00:00:00.000Z" },
+                { input: "1", expected: "0001-01-01T00:00:00.001Z" },
+                { input: "-1", expected: errorOutput },
+                { input: "foo", expected: errorOutput },
                 { input: undefined, expected: errorOutput },
-                { input: '99999999999999999999', expected: overflowOutput },
-                { input: '638338147199990000', expected: '2023-10-25T07:11:59.999Z' },
-                { input: '638338147200000000', expected: '2023-10-25T07:12:00.000Z' },
-                { input: '638315425210000000', expected: '2023-09-29T00:02:01.000Z' },
-                { input: '638315425210010000', expected: '2023-09-29T00:02:01.001Z' },
+                { input: "99999999999999999999", expected: overflowOutput },
+                { input: "638338147199990000", expected: "2023-10-25T07:11:59.999Z" },
+                { input: "638338147200000000", expected: "2023-10-25T07:12:00.000Z" },
+                { input: "638315425210000000", expected: "2023-09-29T00:02:01.000Z" },
+                { input: "638315425210010000", expected: "2023-09-29T00:02:01.001Z" },
             ]) {
                 testCase.actual = ticksToDateString(testCase.input);
                 testCase.status = testCase.expected === testCase.actual ? "✅" : "❌";
                 console.log(testCase);
             }
         };
+
+
+        //
+        // onload
+        //
+
+        window.byQuery = function () {
+            // attempt to set the page if something is passed into the query string
+            const urlParams = new URLSearchParams(window.location.search);
+            const ticks = urlParams.get("ticks");
+            if (ticks) {
+                ticksInput.value = ticks;
+                doWork.call(ticksInput);
+            }
+        };
+        window.byQuery();
+
+        // intercept link clicks that we can handle without reloading the page
+        document.querySelector("body").addEventListener("click", function (e) {
+            const anchor = e.target.closest("a");
+            if (anchor && anchor.getAttribute("href").startsWith("?ticks=")) {
+                history.replaceState({}, "", anchor.href);
+                window.byQuery();
+                document.body.scrollIntoView({ behavior: "smooth" });
+                e.preventDefault();
+            }
+        }, false);
+
+        // bind to the first supported event (listed in order of preference)
+        for (const eventName of ["oninput", "onpropertychange", "onkeyup", "onchange"]) {
+            if (eventName in ticksInput) {
+                ticksInput[eventName] = doWork;
+                break;
+            }
+        }
     </script>
 </body>
 
